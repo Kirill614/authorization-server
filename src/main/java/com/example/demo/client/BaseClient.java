@@ -11,4 +11,6 @@ import java.util.Set;
 public interface BaseClient {
      Set<String> getStringGrantTypes();
      Set<String> getStringRedirectUris();
+     String getClientSecret();
+     Set<String> getStringScopes();
 }

@@ -1,6 +1,7 @@
 package com.example.demo.client.service;
 
 import com.example.demo.client.*;
+import com.example.demo.converter.ClientConverter;
 import com.example.demo.entity.*;
 import com.example.demo.oauth.dao.AuthGrantTypeRepository;
 import com.example.demo.oauth.dao.AuthMethodRepository;
@@ -8,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class ClientServiceImpl implements ClientService {
@@ -19,16 +18,18 @@ public class ClientServiceImpl implements ClientService {
     private JpaClientRepository clientRepository;
     private AuthGrantTypeRepository grantTypeRepository;
     private AuthMethodRepository authMethodRepository;
+    private ClientConverter clientConverter;
 
     @Autowired
     public ClientServiceImpl(@Qualifier("runtimeRepo") InMemoryClientRepository inMemoryClientRepository,
                              @Qualifier("db") JpaClientRepository clientRepository,
                              AuthGrantTypeRepository grantTypeRepository,
-                             AuthMethodRepository authMethodRepository) {
+                             AuthMethodRepository authMethodRepository,ClientConverter clientConverter) {
         this.inMemoryClientRepository = inMemoryClientRepository;
         this.clientRepository = clientRepository;
         this.grantTypeRepository = grantTypeRepository;
         this.authMethodRepository = authMethodRepository;
+        this.clientConverter = clientConverter;
     }
 
     @Override
@@ -36,35 +37,42 @@ public class ClientServiceImpl implements ClientService {
         inMemoryClientRepository.save(client);
     }
 
+
     @Override
-    public void save(ClientDto client) {
-        if (client.getAuthMethods().contains(EnumAuthMethod.CLIENT_SECRET_BASIC.name().toLowerCase()) &&
-                client.getGrantTypes().contains(EnumGrantType.AUTHORIZATION_CODE.name().toLowerCase()) &&
-                !client.getRedirectUris().isEmpty() && !client.getScopes().isEmpty()) {
-            ClientEntity clientEntity = new ClientEntity();
-            clientEntity.setClientId(client.getClientId());
-            clientEntity.setClientSecret(client.getClientSecret());
-            Optional<AuthenticationMethod> authMethod =
-                    authMethodRepository.findByMethodName(EnumAuthMethod.CLIENT_SECRET_BASIC);
+    public void save(ClientDto clientDto) {
+        ClientEntity client = new ClientEntity();
+        client.setClientId(clientDto.getClientId());
+        client.setClientSecret(clientDto.getClientSecret());
+        clientDto.getScopes().forEach(scope -> client.getScopes()
+                .add(new Scope(scope)));
+        clientDto.getRedirectUris().forEach((uri -> client.getRedirectUris()
+                .add(new RedirectUri(uri))));
+        clientDto.getGrantTypes().forEach(grantType -> {
             Optional<AuthGrantType> authGrantType =
-                    grantTypeRepository.findByGrantType(EnumGrantType.AUTHORIZATION_CODE);
-            client.getScopes().forEach(scope -> clientEntity.getScopes().add(new Scope(scope)));
-            client.getRedirectUris().forEach((uri -> clientEntity.getRedirectUris().add(new RedirectUri(uri))));
-            if(authMethod.isPresent() && authGrantType.isPresent()){
-                clientEntity.getAuthMethods().add(authMethod.get());
-                clientEntity.getAuthGrantTypes().add(authGrantType.get());
-            }
-            clientRepository.save(clientEntity);
-        }
+                    grantTypeRepository.findByGrantType(EnumGrantType.valueOf(
+                            grantType.toUpperCase()));
+            authGrantType.ifPresent(type -> client.getAuthGrantTypes().add(type));
+        });
+        Optional<AuthenticationMethod> authMethod =
+                authMethodRepository.findByMethodName(EnumAuthMethod.CLIENT_SECRET_BASIC);
+        authMethod.ifPresent(method -> client.getAuthMethods().add(authMethod.get()));
+        clientRepository.save(client);
     }
 
     @Override
     public Optional<? extends BaseClient> loadRegisteredClient(String clientId) {
         Optional<? extends BaseClient> registeredClient = inMemoryClientRepository.findClientById(clientId);
-        if(!registeredClient.isPresent()){
+        if (!registeredClient.isPresent()) {
             registeredClient = clientRepository.findByClientId(clientId);
         }
         return registeredClient;
     }
 
+    @Override
+    public List<ClientDto> allClients(){
+       return clientRepository.findAll()
+               .stream()
+               .map(clientConverter::convertFromEntity)
+               .collect(Collectors.toList());
+    }
 }

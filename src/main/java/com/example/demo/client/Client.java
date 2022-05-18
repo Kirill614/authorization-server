@@ -44,6 +44,7 @@ public class Client implements BaseClient {
         this.clientId = clientId;
     }
 
+    @Override
     public String getClientSecret() {
         return clientSecret;
     }
@@ -94,6 +95,11 @@ public class Client implements BaseClient {
     @Override
     public Set<String> getStringRedirectUris(){
         return this.redirectUris;
+    }
+
+    @Override
+    public Set<String> getStringScopes(){
+        return this.scopes;
     }
 
     static class Builder{

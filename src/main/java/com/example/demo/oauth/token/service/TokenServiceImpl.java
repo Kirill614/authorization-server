@@ -17,6 +17,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TokenServiceImpl implements TokenService {
@@ -24,7 +25,7 @@ public class TokenServiceImpl implements TokenService {
     public static final byte[] KEY_BYTES = TOKEN_SECRET.getBytes();
 
     @Override
-    public AccessToken createAccessToken(String username,String clientId, List<String> scopes) {
+    public AccessToken createAccessToken(String username,String clientId, Set<String> scopes) {
         Date issuedAt = new Date();
         Date expirationDate = new Date(new Date().getTime() + 1000000000);
         SecretKey key = new SecretKeySpec(KEY_BYTES, "HmacSHA256");
@@ -41,7 +42,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public RefreshToken createRefreshToken(String username,String clientId, List<String> scopes){
+    public RefreshToken createRefreshToken(String username,String clientId, Set<String> scopes){
         Date issuedAt = new Date();
         Date expirationDate = new Date(new Date().getTime() + 10000000);
         SecretKey key = new SecretKeySpec(KEY_BYTES, "HmacSHA256");

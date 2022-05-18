@@ -1,16 +1,11 @@
 package com.example.demo.oauth.authCode;
 
-import com.example.demo.oauth.authCode.AuthorizationCode;
-import com.example.demo.oauth.authCode.AuthorizationCodeService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.keygen.Base64StringKeyGenerator;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -43,8 +38,7 @@ public class AuthorizationCodeServiceImpl implements AuthorizationCodeService {
 
     @Override
     public AuthorizationCode getAuthorizationCode(String code){
-        Assert.notNull(code, "code can not be null");
-        Assert.notNull(authCodes.get(code), "authorization code was not found");
+        Assert.notNull(authCodes.get(code), "code was not found");
         AuthorizationCode authorizationCode = authCodes.get(code);
         authCodes.remove(code);
         return authorizationCode;

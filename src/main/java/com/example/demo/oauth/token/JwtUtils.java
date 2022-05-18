@@ -1,10 +1,9 @@
 package com.example.demo.oauth.token;
 
-import com.example.demo.exceptions.NotValidTokenException;
+import com.example.demo.exceptions.InvalidTokenException;
 import com.example.demo.oauth.token.service.TokenServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,7 +15,7 @@ public class JwtUtils {
     public static boolean validateJwt(String token) {
         Claims claims = getClaimsFromToken(token);
         if(claims.isEmpty()){
-            throw new NotValidTokenException();
+            throw new InvalidTokenException();
         }
         return true;
     }

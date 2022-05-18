@@ -47,7 +47,7 @@ public class UserRegistrationEndpoint {
     @PostMapping("/register/admin")
     String registerAdmin(@RequestBody UserSignupRequest signupRequest,
                          BindingResult result){
-        validator.validate(signupRequest, result);
+        //validator.validate(signupRequest, result);
         if(result.hasErrors()){
             throw new BadCredentialsException("bad credentials");
         }

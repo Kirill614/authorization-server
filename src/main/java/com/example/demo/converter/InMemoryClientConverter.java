@@ -2,12 +2,6 @@ package com.example.demo.converter;
 
 import com.example.demo.client.Client;
 import com.example.demo.client.ClientDto;
-import com.example.demo.entity.ClientEntity;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import net.minidev.json.JSONObject;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.stereotype.Component;
@@ -16,13 +10,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class ClientDetailsConverter extends BaseConverter<Client, ClientDto> {
-    public ClientDetailsConverter(){
-       super(ClientDetailsConverter::convertToDto, ClientDetailsConverter::convertToEntity);
+public class InMemoryClientConverter extends BaseConverter<Client, ClientDto> {
+    public InMemoryClientConverter(){
+       super(InMemoryClientConverter::convertToDto, InMemoryClientConverter::convertToEntity);
     }
 
      private static ClientDto convertToDto(Client client){
-         return new ClientDto();
+       return new ClientDto();
     }
 
     private static Client convertToEntity(ClientDto dto){
@@ -34,18 +28,7 @@ public class ClientDetailsConverter extends BaseConverter<Client, ClientDto> {
         client.setScopes(dto.getScopes());
         client.setRedirectUris(dto.getRedirectUris());
         return client;
-
-//        ClientEntity entity = new ClientEntity();
-//        entity.setClientId(dto.getClientId());
-//        entity.setClientSecret(dto.getClientSecret());
-
     }
-
-
-
-//    private static ClientEntity convertToEntity(ClientDto clientDto){
-//
-//    }
 
     private static Set<ClientAuthenticationMethod> convertAuthMethods(Set<String> authMethods) {
         Set<ClientAuthenticationMethod> clientAuthenticationMethods = new HashSet<>();

@@ -2,9 +2,9 @@ package com.example.demo.oauth.token.service;
 
 import com.example.demo.client.BaseClient;
 import com.example.demo.client.service.ClientService;
-import com.example.demo.entity.EnumGrantType;
+import com.example.demo.exceptions.InvalidAuthCodeException;
 import com.example.demo.exceptions.NotAuthorizedClientException;
-import com.example.demo.exceptions.NotValidTokenException;
+import com.example.demo.exceptions.InvalidTokenException;
 import com.example.demo.exceptions.RegisteredClientNotFoundException;
 import com.example.demo.oauth.authCode.AuthorizationCode;
 import com.example.demo.oauth.authCode.AuthorizationCodeService;
@@ -15,12 +15,8 @@ import com.example.demo.oauth.token.TokenResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TokenResponseServiceImpl implements TokenResponseService {
@@ -37,16 +33,18 @@ public class TokenResponseServiceImpl implements TokenResponseService {
     }
 
     @Override
-    public TokenResponse<AccessToken, RefreshToken> consumeAuthCodeAndGenerateTokens(String code) throws Exception {
-        Assert.notNull(code, "code can not be null");
+    public TokenResponse<AccessToken, RefreshToken> consumeAuthCodeAndGenerateTokens(
+            String code, Set<String> scopes) throws Exception {
         AuthorizationCode authCode = authCodeService.getAuthorizationCode(code);
         if (authCode == null || authCode.isExpired()) {
-            throw new Exception("auth code was not found or expired");
+            throw new InvalidAuthCodeException();
         }
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         TokenResponse<AccessToken, RefreshToken> tokenResponse = new TokenResponse<>();
-        tokenResponse.setAccessToken(tokenService.createAccessToken(username, authCode.getClientId(), Collections.singletonList("read")));
-        tokenResponse.setRefreshToken(tokenService.createRefreshToken(username, authCode.getClientId(), Collections.singletonList("read")));
+        tokenResponse.setAccessToken(tokenService.createAccessToken(username,
+                authCode.getClientId(), scopes));
+        tokenResponse.setRefreshToken(tokenService.createRefreshToken(username,
+                authCode.getClientId(), scopes));
         return tokenResponse;
     }
 
@@ -57,7 +55,7 @@ public class TokenResponseServiceImpl implements TokenResponseService {
         String username = JwtUtils.parseUsernameFromToken(refreshToken);
 
         if (clientId == null || username == null) {
-            throw new NotValidTokenException();
+            throw new InvalidTokenException();
         }
         Optional<? extends BaseClient> registeredClientOptional = clientService.loadRegisteredClient(clientId);
         if (!registeredClientOptional.isPresent()) {
@@ -69,17 +67,40 @@ public class TokenResponseServiceImpl implements TokenResponseService {
                 .contains(AuthorizationGrantType.REFRESH_TOKEN.getValue())) {
             throw new NotAuthorizedClientException("client is not authorized to request refresh token");
         }
+
+        if (!JwtUtils.validateJwt(refreshToken)) {
+            throw new InvalidTokenException();
+        }
         TokenResponse<AccessToken, RefreshToken> tokenResponse = new TokenResponse<>();
 
         tokenResponse.setAccessToken(
                 tokenService.createAccessToken(username,
                         clientId,
-                        Collections.singletonList("read")));
+                        registeredClient.getStringScopes()));
 
         tokenResponse.setRefreshToken(
                 tokenService.createRefreshToken(username,
                         clientId,
-                        Collections.singletonList("read")));
+                        registeredClient.getStringScopes()));
+
+        return tokenResponse;
+    }
+
+    @Override
+    public TokenResponse<AccessToken, RefreshToken> generateTokens(String clientId, Set<String> scopes) {
+        TokenResponse<AccessToken, RefreshToken> tokenResponse = new TokenResponse<>();
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        tokenResponse.setAccessToken(
+                tokenService.createAccessToken(username,
+                        clientId,
+                        scopes));
+
+        tokenResponse.setRefreshToken(
+                tokenService.createRefreshToken(username,
+                        clientId,
+                        scopes));
 
         return tokenResponse;
     }

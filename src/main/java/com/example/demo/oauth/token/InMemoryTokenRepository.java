@@ -10,15 +10,15 @@ import java.util.Map;
 public class InMemoryTokenRepository {
     private Map<String, TokenResponse> tokens = new HashMap<>();
 
-    public void saveTokenResponse(String username, TokenResponse tokenResponse){
+    public void saveTokenResponse(String username, TokenResponse tokenResponse) {
         Assert.notNull(tokenResponse, "token response is not created");
         Assert.notNull(tokenResponse.getAccessToken(), "access token is not created");
         Assert.notNull(tokenResponse.getRefreshToken(), "refresh token is not created");
         tokens.put(username, tokenResponse);
     }
 
-    public TokenResponse getTokenResponse(String username) throws Exception{
-        if(tokens.get(username) == null) throw new Exception("token was not found");
+    public TokenResponse getTokenResponse(String username) throws Exception {
+        if (tokens.get(username) == null) throw new Exception("token was not found");
         return tokens.get(username);
     }
 }

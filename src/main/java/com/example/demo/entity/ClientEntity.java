@@ -71,6 +71,13 @@ public class ClientEntity implements BaseClient {
                .collect(Collectors.toSet());
     }
 
+    @Override
+    public Set<String> getStringScopes(){
+        return scopes.stream()
+                .map(scope -> scope.getScope())
+                .collect(Collectors.toSet());
+    }
+
     public String getClientId() {
         return clientId;
     }
@@ -79,6 +86,7 @@ public class ClientEntity implements BaseClient {
         this.clientId = clientId;
     }
 
+    @Override
     public String getClientSecret() {
         return clientSecret;
     }

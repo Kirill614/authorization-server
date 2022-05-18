@@ -1,13 +1,20 @@
 package com.example.demo.client;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 public class ClientDto {
+    @NotBlank
     private String clientId;
+    @NotBlank
     private String clientSecret;
+    @NotBlank
     private Set<String> authMethods;
+    @NotBlank
     private Set<String> grantTypes;
+    @NotBlank
     private Set<String> scopes;
+    @NotBlank
     private Set<String> redirectUris;
 
     public ClientDto(String clientId, String clientSecret, Set<String> authMethods,

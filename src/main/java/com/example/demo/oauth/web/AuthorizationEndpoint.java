@@ -39,34 +39,9 @@ public class AuthorizationEndpoint {
         this.clientService = clientService;
     }
 
-//    @GetMapping(value = "/authorize")
-//    String authCode(@RequestParam("response_type") String responseType,
-//                    @RequestParam("client_id") String clientId,
-//                    @RequestParam("scope") String scope,
-//                    //@RequestParam("state") String state,
-//                    @RequestParam("redirect_uri") String redirectUri,
-//                    HttpServletRequest request) throws Exception {
-//
-//        Optional<Client> registeredClient = clientRepo.findClientById(clientId);
-//        if (!registeredClient.isPresent()) {
-//            throw new Exception("client not found");
-//        }
-//        if (!registeredClient.get().getAuthGrantType().contains(AuthorizationGrantType.AUTHORIZATION_CODE)) {
-//            throw new Exception("client can not get auth code");
-//        }
-//        if (!responseType.equals("code")) {
-//            throw new Exception("unknown response type");
-//        }
-//        AuthorizationCode code =
-//                authCodeService.generateAndStoreCode(clientId, redirectUri, Collections.singleton(scope));
-//        return "redirect:" + redirectUri + "?code=" + code.getCode(); // + "&state=" + state;
-//    }
-
     @GetMapping(value = "/authorize")
     String auth(@RequestParam("response_type") String responseType,
                 @RequestParam("client_id") String clientId,
-                @RequestParam("scope") String scope,
-                //@RequestParam("state") String state,
                 @RequestParam("redirect_uri") String redirectUri,
                 HttpServletRequest request) throws Exception {
 
@@ -78,7 +53,7 @@ public class AuthorizationEndpoint {
         BaseClient registeredClient = optionalRegisteredClient.get();
 
         if (!registeredClient.getStringGrantTypes()
-                .contains(AuthorizationGrantType.REFRESH_TOKEN.getValue())) {
+                .contains(AuthorizationGrantType.AUTHORIZATION_CODE.getValue())) {
             throw new NotAuthorizedClientException(String.format("Client with id %s is" +
                     " not authorized to request auth code", clientId));
         }
@@ -92,7 +67,7 @@ public class AuthorizationEndpoint {
         }
 
         AuthorizationCode code = authCodeService.generateAndStoreCode(clientId, redirectUri,
-                        Collections.singleton(scope));
+                registeredClient.getStringScopes());
 
         return "redirect:" + redirectUri + "?code=" + code.getCode();
     }
