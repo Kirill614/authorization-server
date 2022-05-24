@@ -16,7 +16,7 @@ public class AuthorizationCodeServiceImpl implements AuthorizationCodeService {
 
     private Supplier<String> codeGenerator = () -> defaultGenerator.generateKey();
     private Map<String, AuthorizationCode> authCodes = new HashMap<String, AuthorizationCode>();
-    private static final long authCodeExpiration = 500000000;
+    private static final long authCodeExpiration = 300000;
     private Logger logger = LoggerFactory.getLogger(AuthorizationCodeServiceImpl.class);
 
     @Override

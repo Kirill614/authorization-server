@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,14 +40,8 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public void save(ClientDto clientDto) {
-        ClientEntity client = new ClientEntity();
-        client.setClientId(clientDto.getClientId());
-        client.setClientSecret(clientDto.getClientSecret());
-        clientDto.getScopes().forEach(scope -> client.getScopes()
-                .add(new Scope(scope)));
-        clientDto.getRedirectUris().forEach((uri -> client.getRedirectUris()
-                .add(new RedirectUri(uri))));
+    public ClientEntity save(ClientDto clientDto) {
+        ClientEntity client = clientConverter.convertFromDto(clientDto);
         clientDto.getGrantTypes().forEach(grantType -> {
             Optional<AuthGrantType> authGrantType =
                     grantTypeRepository.findByGrantType(EnumGrantType.valueOf(
@@ -56,7 +51,7 @@ public class ClientServiceImpl implements ClientService {
         Optional<AuthenticationMethod> authMethod =
                 authMethodRepository.findByMethodName(EnumAuthMethod.CLIENT_SECRET_BASIC);
         authMethod.ifPresent(method -> client.getAuthMethods().add(authMethod.get()));
-        clientRepository.save(client);
+        return clientRepository.save(client);
     }
 
     @Override

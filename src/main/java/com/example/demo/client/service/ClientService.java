@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ClientService {
     void saveInMemoryClient(Client client);
-    void save(ClientDto client);
+    ClientEntity save(ClientDto client);
     Optional<? extends BaseClient> loadRegisteredClient(String clientId);
     List<ClientDto> allClients();
 }

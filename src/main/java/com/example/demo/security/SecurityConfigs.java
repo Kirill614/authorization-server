@@ -22,7 +22,7 @@ public class SecurityConfigs extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .mvcMatchers("/.well-known/openid-configuration",
-                        "/register/user", "/register/admin")
+                        "/register/user", "/register/admin", "/api/clients/register")
                 .permitAll().and()
                 .authorizeRequests(auth -> auth.anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults());

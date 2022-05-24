@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Optional;
 
 @Controller
-//@RequestMapping(value = TokenEndpoint.URL)
 public class TokenEndpoint {
     public static final String URL = "/oauth2/token";
     private TokenResponseService tokenResponseService;

@@ -30,15 +30,15 @@ public class ClientApi {
         this.converter = converter;
     }
 
-    @PostMapping(value = "/register_inmemory")
-    ResponseEntity<?> regInMemoryClient(@Valid @RequestBody ClientDto clientDto) {
+    @PostMapping(value = "/register/inMemory")
+    ResponseEntity<?> registerInMemoryClient(@Valid @RequestBody ClientDto clientDto) {
         Client client = converter.convertFromDto(clientDto);
         clientService.saveInMemoryClient(client);
         return ResponseEntity.ok("client created");
     }
 
     @PostMapping(value = "/register")
-    ResponseEntity<?> regClient(@Valid @RequestBody ClientDto clientDto) {
+    ResponseEntity<?> registerClient(@Valid @RequestBody ClientDto clientDto) {
         clientService.save(clientDto);
         return ResponseEntity.ok("client has been saved in DB");
     }

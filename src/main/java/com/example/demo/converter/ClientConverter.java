@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public class ClientConverter extends BaseConverter<ClientEntity, ClientDto> {
     public ClientConverter() {
-        super(ClientConverter::convertToDto, null);
+        super(ClientConverter::convertToDto, ClientConverter::convertToEntity);
     }
 
     public static ClientDto convertToDto(ClientEntity client) {
@@ -27,6 +27,17 @@ public class ClientConverter extends BaseConverter<ClientEntity, ClientDto> {
         dto.setClientId(client.getClientId());
         dto.setClientSecret(client.getClientSecret());
         return dto;
+    }
+
+    public static ClientEntity convertToEntity(ClientDto clientDto){
+        ClientEntity client = new ClientEntity();
+        client.setClientId(clientDto.getClientId());
+        client.setClientSecret(clientDto.getClientSecret());
+        clientDto.getScopes().forEach(scope -> client.getScopes()
+                .add(new Scope(scope)));
+        clientDto.getRedirectUris().forEach((uri -> client.getRedirectUris()
+                .add(new RedirectUri(uri))));
+        return client;
     }
 
     private static Set<String> convertGrantTypes(Set<AuthGrantType> grantTypes) {

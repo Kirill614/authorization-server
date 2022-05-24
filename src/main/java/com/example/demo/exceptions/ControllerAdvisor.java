@@ -17,46 +17,4 @@ public class ControllerAdvisor {
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
-
-//    @ExceptionHandler(RegisteredClientNotFoundException.class)
-//    ResponseEntity<?> clientNotFoundEx(RegisteredClientNotFoundException ex, WebRequest request){
-//        Map<String, Object> body = new HashMap<>();
-//        body.put("message", ex.getMessage());
-//        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-//    }
-//
-//    @ExceptionHandler(RedirectUriDoesnotMatchException.class)
-//    ResponseEntity<?> uriDoesnotMatch(RedirectUriDoesnotMatchException ex, WebRequest request){
-//        Map<String, Object> body = new HashMap<>();
-//        body.put("message", ex.getMessage());
-//        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(WrongResponseTypeException.class)
-//    ResponseEntity<?> wrongResponseType(WrongResponseTypeException ex, WebRequest request){
-//        Map<String, Object> body = new HashMap<>();
-//        body.put("message", ex.getMessage());
-//        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(NotAuthorizedClientException.class)
-//    ResponseEntity<?> wrongResponseType(NotAuthorizedClientException ex, WebRequest request){
-//        Map<String, Object> body = new HashMap<>();
-//        body.put("message", ex.getMessage());
-//        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(NotValidTokenException.class)
-//    ResponseEntity<?> wrongResponseType(NotValidTokenException ex, WebRequest request){
-//        Map<String, Object> body = new HashMap<>();
-//        body.put("message", ex.getMessage());
-//        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(WrongGrantTypeException.class)
-//    ResponseEntity<?> wrongResponseType(WrongGrantTypeException ex, WebRequest request){
-//        Map<String, Object> body = new HashMap<>();
-//        body.put("message", ex.getMessage());
-//        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-//    }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.client;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 public class ClientDto {
@@ -8,13 +9,13 @@ public class ClientDto {
     private String clientId;
     @NotBlank
     private String clientSecret;
-    @NotBlank
+    @NotNull
     private Set<String> authMethods;
-    @NotBlank
+    @NotNull
     private Set<String> grantTypes;
-    @NotBlank
+    @NotNull
     private Set<String> scopes;
-    @NotBlank
+    @NotNull
     private Set<String> redirectUris;
 
     public ClientDto(String clientId, String clientSecret, Set<String> authMethods,
