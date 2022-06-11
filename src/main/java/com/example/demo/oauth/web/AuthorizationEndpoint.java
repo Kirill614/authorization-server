@@ -5,6 +5,7 @@ import com.example.demo.client.Client;
 import com.example.demo.client.InMemoryClientRepoImpl;
 import com.example.demo.client.JpaClientRepository;
 import com.example.demo.client.service.ClientService;
+import com.example.demo.client.service.ClientServiceImpl;
 import com.example.demo.entity.ClientEntity;
 import com.example.demo.entity.EnumGrantType;
 import com.example.demo.exceptions.NotAuthorizedClientException;

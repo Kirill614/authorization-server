@@ -22,6 +22,7 @@ public class AuthorizationCode {
         this.scopes = scopes;
     }
 
+
     public AuthorizationCode(Date expiredAt){
         this.expiredAt = expiredAt;
     }

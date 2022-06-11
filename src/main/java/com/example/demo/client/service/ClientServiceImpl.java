@@ -25,7 +25,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientServiceImpl(@Qualifier("runtimeRepo") InMemoryClientRepository inMemoryClientRepository,
                              @Qualifier("db") JpaClientRepository clientRepository,
                              AuthGrantTypeRepository grantTypeRepository,
-                             AuthMethodRepository authMethodRepository,ClientConverter clientConverter) {
+                             AuthMethodRepository authMethodRepository, ClientConverter clientConverter) {
         this.inMemoryClientRepository = inMemoryClientRepository;
         this.clientRepository = clientRepository;
         this.grantTypeRepository = grantTypeRepository;
@@ -33,9 +33,12 @@ public class ClientServiceImpl implements ClientService {
         this.clientConverter = clientConverter;
     }
 
+    public ClientServiceImpl() {
+    }
+
     @Override
-    public void saveInMemoryClient(Client client) {
-        inMemoryClientRepository.save(client);
+    public Client saveInMemoryClient(Client client) {
+        return inMemoryClientRepository.save(client);
     }
 
 
@@ -64,10 +67,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDto> allClients(){
-       return clientRepository.findAll()
-               .stream()
-               .map(clientConverter::convertFromEntity)
-               .collect(Collectors.toList());
+    public List<ClientDto> allClients() {
+        return clientRepository.findAll()
+                .stream()
+                .map(clientConverter::convertFromEntity)
+                .collect(Collectors.toList());
     }
 }

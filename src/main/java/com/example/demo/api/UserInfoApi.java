@@ -6,6 +6,7 @@ import com.example.demo.converter.UserInfoMapper;
 import com.example.demo.exceptions.RegisteredClientNotFoundException;
 import com.example.demo.payload.UserInfoResponse;
 import com.example.demo.user.service.UserInfoService;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.file.AccessDeniedException;
 import java.util.Optional;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping(value = UserInfoApi.URL)
@@ -50,6 +52,8 @@ public class UserInfoApi {
             throw new RegisteredClientNotFoundException(clientId);
         }
         UserInfoResponse userInfoResponse = userInfoService.getUserInfo(username);
+        Link selfLink = linkTo(UserInfoApi.class).slash(userInfoResponse.getUsername()).withSelfRel();
+        userInfoResponse.add(selfLink);
         return ResponseEntity.ok(userInfoResponse);
     }
 }

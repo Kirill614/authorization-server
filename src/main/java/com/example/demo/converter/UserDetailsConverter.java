@@ -9,6 +9,8 @@ import java.util.HashSet;
 
 @Component
 public class UserDetailsConverter extends BaseConverter<User, UserSignupRequest> {
+    protected String name = "kirill";
+
     public UserDetailsConverter() {
         super(null, UserDetailsConverter::toEntity);
     }

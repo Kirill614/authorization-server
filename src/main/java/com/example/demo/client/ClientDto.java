@@ -1,10 +1,12 @@
 package com.example.demo.client;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
-public class ClientDto {
+public class ClientDto extends RepresentationModel<ClientDto> {
     @NotBlank
     private String clientId;
     @NotBlank

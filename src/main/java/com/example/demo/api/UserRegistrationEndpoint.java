@@ -2,6 +2,7 @@ package com.example.demo.api;
 
 import com.example.demo.client.BaseClient;
 import com.example.demo.client.service.ClientService;
+import com.example.demo.entity.User;
 import com.example.demo.exceptions.RegisteredClientNotFoundException;
 import com.example.demo.payload.UserSignupRequest;
 import com.example.demo.user.service.UserRegistrationService;
@@ -28,9 +29,9 @@ public class UserRegistrationEndpoint {
     }
 
     @PostMapping("/register/user")
-    String registerNewAccount(@RequestParam("client_id") String clientId,
-                              @RequestBody UserSignupRequest signupRequest,
-                              BindingResult result) {
+    User registerNewAccount(@RequestParam("client_id") String clientId,
+                            @RequestBody UserSignupRequest signupRequest,
+                            BindingResult result) {
         validator.validate(signupRequest, result);
         if (result.hasErrors()) {
             throw new BadCredentialsException("bad credentials");
@@ -40,19 +41,17 @@ public class UserRegistrationEndpoint {
         if (!registeredClientOptional.isPresent()) {
             throw new RegisteredClientNotFoundException(clientId);
         }
-        registrationService.registerNewAccount(signupRequest, false);
-        return "user saved";
+        return registrationService.registerNewAccount(signupRequest, false);
     }
 
     @PostMapping("/register/admin")
-    String registerAdmin(@RequestBody UserSignupRequest signupRequest,
+    User registerAdmin(@RequestBody UserSignupRequest signupRequest,
                          BindingResult result){
         validator.validate(signupRequest, result);
         if(result.hasErrors()){
             throw new BadCredentialsException("bad credentials");
         }
-        registrationService.registerNewAccount(signupRequest, true);
-        return "admin saved";
+        return registrationService.registerNewAccount(signupRequest, true);
     }
 
 }

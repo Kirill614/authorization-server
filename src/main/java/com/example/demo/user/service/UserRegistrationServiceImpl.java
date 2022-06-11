@@ -35,7 +35,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     }
 
     @Override
-    public void registerNewAccount(UserSignupRequest request, boolean isAdmin) {
+    public User registerNewAccount(UserSignupRequest request, boolean isAdmin) {
         Role role;
         if(isAdmin){
             role = roleRepository.findByRole(EnumRole.ROLE_ADMIN)
@@ -49,7 +49,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         user.setPassword(encoder.encode(request.getPassword()));
         user.setMail(request.getMail());
         user.getRoles().add(role);
-        userDetailsService.saveUser(user);
+        return userDetailsService.saveUser(user);
     }
 
 }

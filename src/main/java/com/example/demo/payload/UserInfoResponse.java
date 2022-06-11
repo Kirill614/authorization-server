@@ -1,6 +1,8 @@
 package com.example.demo.payload;
 
-public class UserInfoResponse {
+import org.springframework.hateoas.RepresentationModel;
+
+public class UserInfoResponse extends RepresentationModel<UserInfoResponse> {
     private String username;
     private String mail;
 

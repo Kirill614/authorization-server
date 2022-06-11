@@ -1,7 +1,8 @@
 package com.example.demo.user.service;
 
+import com.example.demo.entity.User;
 import com.example.demo.payload.UserSignupRequest;
 
 public interface UserRegistrationService {
-    void registerNewAccount(UserSignupRequest request, boolean isAdmin);
+    User registerNewAccount(UserSignupRequest request, boolean isAdmin);
 }

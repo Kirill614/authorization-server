@@ -13,9 +13,9 @@ public class InMemoryClientRepoImpl implements InMemoryClientRepository {
     private Map<String, Client> clients = new HashMap<>();
 
     @Override
-    public void save(Client client) {
+    public Client save(Client client) {
        Assert.notNull(client, "client cannot be null");
-       clients.put(client.getClientId(), client);
+       return clients.put(client.getClientId(), client);
     }
 
     @Override

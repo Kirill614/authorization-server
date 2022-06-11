@@ -21,10 +21,9 @@ public class SecurityConfigs extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .mvcMatchers("/.well-known/openid-configuration",
-                        "/register/user", "/register/admin", "/api/clients/register")
+                .mvcMatchers("/register/user", "/register/admin", "/api/clients/register")
                 .permitAll().and()
-                .authorizeRequests(auth -> auth.anyRequest().authenticated())
+                .authorizeRequests(auth -> auth.anyRequest().permitAll())
                 .formLogin(Customizer.withDefaults());
     }
 
