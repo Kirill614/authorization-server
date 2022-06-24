@@ -21,9 +21,12 @@ public class SecurityConfigs extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .mvcMatchers("/register/user", "/register/admin", "/api/clients/register")
-                .permitAll().and()
-                .authorizeRequests(auth -> auth.anyRequest().permitAll())
+                .mvcMatchers("/register/user", "/register/admin")
+                .permitAll()
+                .mvcMatchers("/api/clients/*").hasRole("ADMIN")
+                .mvcMatchers("/api/userinfo").hasRole("USER")
+                .and()
+                .authorizeRequests(auth -> auth.anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults());
     }
 

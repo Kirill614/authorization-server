@@ -38,12 +38,14 @@ public class ClientApi {
     }
 
     @PostMapping(value = "/register/inMemory")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ResponseEntity<?> registerInMemoryClient(@Valid @RequestBody ClientDto clientDto) {
         Client client = converter.convertFromDto(clientDto);
         return ResponseEntity.ok(clientService.saveInMemoryClient(client));
     }
 
     @PostMapping(value = "/register")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ResponseEntity<?> registerClient(@Valid @RequestBody ClientDto clientDto) {
         clientService.save(clientDto);
         return ResponseEntity.ok(clientService.save(clientDto));

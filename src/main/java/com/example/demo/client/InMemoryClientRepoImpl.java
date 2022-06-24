@@ -1,6 +1,7 @@
 package com.example.demo.client;
 
 import com.example.demo.exceptions.RegisteredClientNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -25,4 +26,5 @@ public class InMemoryClientRepoImpl implements InMemoryClientRepository {
      }
      return Optional.of(clients.get(id));
     }
+
 }

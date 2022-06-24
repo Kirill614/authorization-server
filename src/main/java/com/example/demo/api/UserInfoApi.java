@@ -23,7 +23,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 @RestController
 @RequestMapping(value = UserInfoApi.URL)
 public class UserInfoApi {
-    public static final String URL = "/userinfo";
+    public static final String URL = "/api/userinfo";
     private ClientService clientService;
     private UserDetailsService userDetailsService;
     private UserInfoMapper userInfoMapper;

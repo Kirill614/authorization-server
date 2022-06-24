@@ -4,6 +4,7 @@ import com.example.demo.converter.UserDetailsConverter;
 import com.example.demo.oauth.token.AccessToken;
 import com.example.demo.oauth.token.RefreshToken;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -25,11 +26,11 @@ public class TokenServiceImpl implements TokenService {
                 .setSubject(username)
                 .setIssuedAt(issuedAt)
                 .setExpiration(expirationDate)
-                .claim("scope", "articles.read")
+                .claim("scope", scopes)
                 .claim("client", clientId)
                 .signWith(key)
                 .compact();
-        System.out.println("ACCESS TOKEN : " + jws);
+
         return new AccessToken(jws, issuedAt, expirationDate);
     }
 
