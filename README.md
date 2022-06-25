@@ -11,6 +11,6 @@ This project is an authorization server designed according to the Oauth 2.0 fram
 * User and admin registration
 * RESTful API for managing clients, registered users, getting information about users
 ## Authorization server run instructions
-This Spring Boot application requires Java 8 JDK or higher, also it uses maven as its build system.To run the authorization server just run Spring Boot starter class com.example.demo.AuthorizationServerApplication via your IDE.
+This Spring Boot application requires Java 8 JDK or higher, also it uses maven as its build system. To run the authorization server just run Spring Boot starter class com.example.demo.AuthorizationServerApplication via your IDE.
 
 
