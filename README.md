@@ -1,5 +1,5 @@
 # Authorization Server
-This project is an authorization server designed according to the Oauth 2.0 framework specification.
+This project is an authorization server designed according to the Oauth 2.0 framework specification. The main purpose of this server is to authorize users to access protected resources by issuing access tokens.
 ## Supported features
 * [RFC 6749 : Oauth 2.0 Framework](https://datatracker.ietf.org/doc/html/rfc6749)
 * Oauth 2.0 grant flows
